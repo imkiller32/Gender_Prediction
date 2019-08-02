@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'settings.dart';
@@ -12,7 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController _nameController = TextEditingController();
   var result = "Unknown";
   var resultprobability;
-  var probability="0";
+  var probability = "0";
   predictGender(String name) async {
     var url = "https://api.genderize.io/?name=$name";
     var response = await http.get(url);
@@ -21,6 +22,16 @@ class _HomeScreenState extends State<HomeScreen> {
     resultprobability = "Probability : ${body['probability']}";
     result = "${body['gender']}";
     setState(() {});
+  }
+
+  bool check(String name) {
+    return (name.length > 0);
+  }
+
+  startPredictor(String name) {
+    result = null;
+    setState(() {});
+    predictGender(_nameController.text);
   }
 
   @override
@@ -60,9 +71,37 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/maleAvatar.jpg',
+                        fit: BoxFit.contain,
+                        height: 100.0,
+                      ),
+                      Text('Male'),
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/femaleAvatar.png',
+                        fit: BoxFit.contain,
+                        height: 100.0,
+                      ),
+                      Text('Female'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
             Text("Enter a name to predict"),
             Padding(
-              padding: const EdgeInsets.all(18.0),
+              padding: const EdgeInsets.all(5.0),
               child: TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
@@ -71,28 +110,35 @@ class _HomeScreenState extends State<HomeScreen> {
                     border: OutlineInputBorder()),
               ),
             ),
-            FlatButton(
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6.0)),
-              child: SizedBox(
-                width: double.infinity,
-                child: Text(
-                  'PREDICT',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.3,
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: FlatButton(
+                color: Colors.blue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6.0)),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    'PREDICT',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.3,
+                    ),
                   ),
                 ),
+                onPressed: () {
+                  if (check(_nameController.text))
+                    startPredictor(_nameController.text);
+                  else
+                    Fluttertoast.showToast(
+                        msg: "Name can not be empty",
+                        toastLength: Toast.LENGTH_SHORT,
+                        fontSize: 16.0);
+                },
               ),
-              onPressed: () {
-                result = null;
-                setState(() {});
-                predictGender(_nameController.text);
-              },
             ),
             if (result == null)
               CircularProgressIndicator(
@@ -115,6 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           fit: BoxFit.contain,
                           height: 40.0,
                         ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                  ),
                   Text(resultprobability),
                 ],
               ),
@@ -126,6 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     fit: BoxFit.contain,
                     height: 40.0,
                   ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                  ),
                   Text(resultprobability),
                 ],
               ),
@@ -136,6 +188,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     'assets/invalid.png',
                     fit: BoxFit.contain,
                     height: 40.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
                   ),
                   Text(resultprobability),
                 ],
