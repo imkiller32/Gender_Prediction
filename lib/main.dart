@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'home_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,62 +9,13 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
     return MaterialApp(
-      home: HomeScreen(),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
-    );
-  }
-}
-
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-
-  TextEditingController _nameController = TextEditingController();
-  var result;
-
-  predictGender(String name) async{
-
-    var url = "https://api.genderize.io/?name=$name";
-    var response  = await http.get(url);
-    var body = jsonDecode(response.body);
-    result = "Gender:${body['gender']} \n Probability: ${body['probability']}";
-    setState(() {
-      
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Gender Prediction"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text("Enter a name to predict"),
-            Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: TextField(
-                controller: _nameController,
-                decoration: InputDecoration(hintText: "Name"),
-              ),
-            ),
-            RaisedButton(
-              onPressed: () =>predictGender(_nameController.text),
-              child: Text("Predict"),
-            ),
-            if (result != null) Text(result)
-          ],
-        ),
-      ),
+      home: HomeScreen(),
     );
   }
 }
