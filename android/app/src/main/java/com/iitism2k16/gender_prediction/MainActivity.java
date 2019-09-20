@@ -1,4 +1,4 @@
-package com.example.gender_prediction;
+package com.iitism2k16.gender_prediction;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

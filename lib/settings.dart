@@ -58,7 +58,7 @@ class _SettingPageState extends State<SettingPage> {
                 padding: EdgeInsets.only(top: 15.0),
               ),
               Text('GenderPredictor'),
-              Text('Version:1.0.0'),
+              Text('Version:2.0.0'),
             ],
           ),
         ),
