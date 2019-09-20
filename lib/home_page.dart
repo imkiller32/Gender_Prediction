@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'settings.dart';
@@ -16,7 +15,6 @@ class _HomeScreenState extends State<HomeScreen> {
   var resultprobability;
   var probability = "0";
 
-  Iterable<Contact> contacts;
   predictGender(String name) async {
     var url = "https://api.genderize.io/?name=$name";
     var response = await http.get(url);
@@ -25,11 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
     resultprobability = "Probability : ${body['probability']}";
     result = "${body['gender']}";
     setState(() {});
-  }
-
-  getcontacts() async {
-    contacts = await ContactsService.getContacts();
-    print(contacts);
   }
 
   bool check(String name) {
@@ -74,17 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     getcontacts();
-      //   },
-      //   tooltip: 'Fetch Contacts',
-      //   child: Icon(
-      //     Icons.import_contacts,
-      //   ),
-      //   backgroundColor: Colors.blue,
-      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
