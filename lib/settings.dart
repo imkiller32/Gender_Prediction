@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gender_prediction/theme.dart';
+import 'package:provider/provider.dart';
 import 'module.dart';
 
 void main() => runApp(Setting());
@@ -25,6 +27,7 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return SingleChildScrollView(
       child: Container(
         child: Padding(
@@ -40,8 +43,17 @@ class _SettingPageState extends State<SettingPage> {
               ListTile(
                 title: Text('Dark Theme'),
                 trailing: Switch(
-                  value: false,
-                  onChanged: null,
+                  value: darkTheme,
+                  onChanged: (value) {
+                    setState(() {
+                      module.setTheme(value);
+                      darkTheme = module.getTheme();
+                      if (value == true)
+                        _themeChanger.setTheme(ThemeData.dark());
+                      else
+                        _themeChanger.setTheme(ThemeData.light());
+                    });
+                  },
                 ),
               ),
               Divider(
@@ -58,7 +70,7 @@ class _SettingPageState extends State<SettingPage> {
                 padding: EdgeInsets.only(top: 15.0),
               ),
               Text('GenderPredictor'),
-              Text('Version:2.0.1'),
+              Text('Version:2.0.2'),
             ],
           ),
         ),

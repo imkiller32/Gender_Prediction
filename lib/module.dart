@@ -13,4 +13,4 @@ class Module {
   }
 }
 
-Module module = Module(false);
+Module module = Module(true);
